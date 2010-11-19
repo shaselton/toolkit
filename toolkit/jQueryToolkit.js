@@ -10,7 +10,7 @@
  * 
  * this should be modified	
  * 
- * My Own Comment
+ * My Own Comment2
  */
 function GenerateObject(){	
 		
