@@ -18,6 +18,8 @@ Fixing Plugins
 * Mahdi pointed out a couple plugins that weren't returning correctly over the 'each' iteration.
 * Going to need to see a list of those plugins
 
+1- watermark plugin
+2- editable pluin
 
 Production
 ----------
@@ -28,7 +30,8 @@ Production
 Website
 -------
 
-* I guess that your dudes back in iran were taking care of this?  correct?
+* I guess that your dudes back in iran were taking care of this?  correct? 
+LET's DO THIS
 
 
 
