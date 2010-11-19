@@ -9,6 +9,8 @@
  * @copyright © 2010 http://jQueryToolkit.com | All rights reserved. 
  * 
  * this should be modified	
+ * 
+ * My Own Comment
  */
 function GenerateObject(){	
 		
