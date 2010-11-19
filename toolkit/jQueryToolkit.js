@@ -6,7 +6,7 @@
  * @subpackage Toolkit
  * @author Mahdi Pedramrazi <pedramphp@gmail.com>
  * @author Scott Haselton <shaselton@gmail.com>
- * @copyright © 2010 http://jQueryToolkit.com | All rights reserved. 
+ * @copyright 2010 http://jQueryToolkit.com | All rights reserved. 
  * 
  * this should be modified	
  * 
