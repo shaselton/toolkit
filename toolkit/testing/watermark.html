@@ -2,16 +2,17 @@
                     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	<link rel="stylesheet" href="http://github.com/jquery/qunit/raw/master/qunit/qunit.css" type="text/css" media="screen" />
-	<script type="text/javascript" src="http://github.com/jquery/qunit/raw/master/qunit/qunit.js"></script>
-	<script type="text/javascript" src="../production/jquery.watermark.js"></script>
+	<script src="../jquery.js"></script>
+	<link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="qunit/qunit.js"></script>
+	<script type="text/javascript" src="../production/jQuery.watermark.js"></script>
 	
 	<script>
 	
 	$(document).ready(function(){
 
 		module("Focus Test");
+
 	    
 		test("Empty while focused", function() {
 			var focusValue;
@@ -36,7 +37,7 @@
 			$('.water').focus();
 			focusValue = $('.water').val();
 			equals( "New Value", focusValue, "Expectiong to maintain the variable 'New Value' with 'focus' on");
-			
+		
 		});
 		
 	

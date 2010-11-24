@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<script src="../jquery.js"></script>
+	<link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="qunit/qunit.js"></script>
+	<script type="text/javascript" src="../production/jQuery.inObject.js"></script>
+	
+	<script>
+	
+	$(document).ready(function(){
+		
+		module("In Object Testing");
+
+	    
+		test("General Array Tests", function() {
+			
+			var testArray = [1,2,3,"str"];
+			equals( "0", $.inObject(testArray, 1), "Looking for the first element in the array...the position '0' should be returned.");
+			equals( "1", $.inObject(testArray, 2), "Looking for the second element in the array...the position '1' should be returned.");
+			equals( "2", $.inObject(testArray, 3), "Looking for the third element in the array...the position '2' should be returned.");
+			equals( "3", $.inObject(testArray, "str"), "Looking for the fourth element in the array...the position '3' should be returned.");
+			equals( "-1", $.inObject(testArray, 1234), "Looking for an element that doesn't exist.  a '-1' should be returned.");
+		
+		});
+		
+		test("General Object Tests", function() {
+			
+			var testObj = {first:1,second:2,third:3,fourth:"str"};
+			
+			equals( "first", $.inObject(testObj, 1), "Looking for the first element in the object...the element name 'first' should be returned.");
+			equals( "second", $.inObject(testObj, 2), "Looking for the second element in the object...the element name 'second' should be returned.");
+			equals( "third", $.inObject(testObj, 3), "Looking for the third element in the object...the element name 'third' should be returned.");
+			equals( "fourth", $.inObject(testObj, "str"), "Looking for the fourth element in the object...the element name 'fourth' should be returned.");
+			equals( "-1", $.inObject(testObj, 1234), "Looking for an element that doesn't exist.  a '-1' should be returned.");
+			
+		});
+		
+		module("Testing with change the prototype search default");
+
+	    
+		test("General Array Tests", function() {
+			
+			var testArray = [1,2,3,"str"];
+			equals( "0", $.inObject(testArray, 1, {includeProtoSearch:true}), "Looking for the first element in the array...the position '0' should be returned.");
+			equals( "1", $.inObject(testArray, 2, {includeProtoSearch:true}), "Looking for the second element in the array...the position '1' should be returned.");
+			equals( "2", $.inObject(testArray, 3, {includeProtoSearch:true}), "Looking for the third element in the array...the position '2' should be returned.");
+			equals( "3", $.inObject(testArray, "str", {includeProtoSearch:true}), "Looking for the fourth element in the array...the position '3' should be returned.");
+			equals( "-1", $.inObject(testArray, 1234, {includeProtoSearch:true}), "Looking for an element that doesn't exist.  a '-1' should be returned.");
+		
+		});
+		
+		test("General Object Tests", function() {
+			
+			var testObj = {first:1,second:2,third:3,fourth:"str"};
+			
+			equals( "first", $.inObject(testObj, 1, {includeProtoSearch:true}), "Looking for the first element in the object...the element name 'first' should be returned.");
+			equals( "second", $.inObject(testObj, 2, {includeProtoSearch:true}), "Looking for the second element in the object...the element name 'second' should be returned.");
+			equals( "third", $.inObject(testObj, 3, {includeProtoSearch:true}), "Looking for the third element in the object...the element name 'third' should be returned.");
+			equals( "fourth", $.inObject(testObj, "str", {includeProtoSearch:true}), "Looking for the fourth element in the object...the element name 'fourth' should be returned.");
+			equals( "-1", $.inObject(testObj, 1234, {includeProtoSearch:true}), "Looking for an element that doesn't exist.  a '-1' should be returned.");
+			
+		});
+		
+	
+	
+	});
+	
+	
+	
+	
+	</script>
+</head>
+<body>
+<h1 id="qunit-header">jQuery Toolkit inObject.js</h1>
+ <h2 id="qunit-banner"></h2>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture"> 
+ </div>
+
+</body>
+</html>
