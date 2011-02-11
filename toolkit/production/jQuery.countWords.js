@@ -18,7 +18,8 @@
   
   	$.CountWords = function( str ){
   		
-  	    str = str.split(/(\s*)/g);
+  	    str = str.split(/(\s*)/);
+  	    console.log(str);
   	    return str.length;
   	}
   	
