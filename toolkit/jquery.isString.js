@@ -11,9 +11,8 @@
 
 (function( $ ){
 	
-	
 
-	$.isString = function( str, options ){
+	$.fn.isString = function( str, options ){
 		
 		var isString = {
 			
@@ -68,6 +67,5 @@
 
 
 })(jQuery);
-
 
 

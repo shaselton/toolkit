@@ -10,16 +10,17 @@
 
 (function($){
   	
-  	$.removeArrayIndex = function(index){
-  		
+  	$.removeArrayIndex = function( index/*, callback */){
+  		console.log(this);
   	    var r = new Array();
   	  
   	    for(var i = 0, n = this.length; i < n; i++){
   	        if( i != index){ r.push(this[i]); }
   	    }
-
+  	    
+		//$.isFunction( callback ) ? callback.apply( $, [index, r] ) : $.noop;
   	    return r;
-  	}
+  	};
   	
 })(jQuery);
   
