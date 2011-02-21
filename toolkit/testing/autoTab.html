@@ -1,0 +1,40 @@
+
+
+<html>
+<head>
+	<script src="../jquery.js"></script>
+	<link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="qunit/qunit.js"></script>
+	<script type="text/javascript" src="../jQuery.autoTab.js"></script>
+	<script>
+	
+	$(document).ready(function(){
+
+			
+	$('.test').autoTab(5);
+	
+	
+	});
+	
+	</script>
+  
+</head>
+<body>
+  <h1 id="qunit-header">jQuery Toolkit isString.js</h1>
+ <h2 id="qunit-banner"></h2>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture"> 
+ <input class="water" type="text" value="testing" />
+ <input class="water1" type="text" value="testing1" />
+ </div>
+ 
+ <div>
+	<input tabindex='1' class='test' size=12  type="text" />
+	<input tabindex='2' type="checkbox" class='test' value="yes" />
+	<input tabindex='3' class='test' size=12  type="text" />
+ </div>
+
+</body>
+</html>
+
