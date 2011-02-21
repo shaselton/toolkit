@@ -12,7 +12,7 @@
 (function( $ ){
 	
 
-	$.fn.isString = function( str, options ){
+	$.isString = function( str, options ){
 		
 		var isString = {
 			
@@ -58,7 +58,6 @@
 			}
 			
 		};
-		
 		isString.init().callback();
 		return isString.result;
 		

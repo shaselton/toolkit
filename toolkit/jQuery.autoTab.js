@@ -24,17 +24,19 @@
 			options:{},
 			defaults:{
 				
-				numbOfChars : $dom.attr('maxlength') || 5,
-				callback:$.noop,
+				numbOfChars : $dom.attr('maxlength') || 5,  // TODO: to be changed later!
+				//callback:$.noop,
 				ajax: false,
-				nextTarget: ( $dom.attr('tabindex') ) ? $dom.attr('tabindex') + 1 : 4
+				nextTarget: ( $dom.attr('tabindex') ) ? 
+							parseInt($dom.attr('tabindex'), 10) + 1 : // unexpected behavior if bad input string?
+							4  //TODO: placeholder
 				
 			},
 			
 			init: function(){
 				
 				this.determineAction();
-				return this;
+				return dom;
 				
 			},
 			
@@ -57,28 +59,35 @@
 				
 			},
 				
-			keypressDown: function(){
+			keypressDown: function(event){
 				
 				if ( autoTab.options.numbOfChars < $dom.val().length ){
-					$dom.blur();
+					
+					if ( ($next = $('[tabindex=' + autoTab.options.nextTarget + ']')).length !== 0 ){
+						$next.focus();
+					} else {
+						// simulate tab being pressed
+						//$dom.trigger('keypress', 
+						$dom.next().focus();
+					}
+					
 				}
 				
 			},
 			
 			callback: function(){
 				
-				if( $.isFunction( options.callback ) ){	options.callback.apply( $, [str, this.result] ); }
+				//if( $.isFunction( options.callback ) ){	options.callback.apply( $, [str, this.result] ); }
 				
 			}
 			
 		};
 			
 		$dom.keypress( autoTab.keypressDown );
-			
-		return this.each( autoTab.init() );
-		//return isString.result;
 		
-	} /* < / $.IsString  > */ 
+		return autoTab.init();
+		
+	} /* < / $.autoTabx  > */ 
 	
 
 
