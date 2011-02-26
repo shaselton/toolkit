@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src ='../../jQuery.watermark.js'></script>
+	<script>
+	$(document).ready(function(){
+
+		$('input').watermark();
+
+		$('form').submit(function(){
+
+			console.log('submit form');
+			console.log($(this).serialize());
+			return false;
+			
+		});
+	});
+	
+	</script>
+</head>
+
+
+
+<body>
+	<form>
+    	<input type="text" name="FirstName" data-watermark="Mickey" />
+		<input type="submit" class="t" value="sValidate" />
+	</form>
+</body>

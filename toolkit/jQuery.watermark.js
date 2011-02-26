@@ -11,22 +11,144 @@
 
 (function($){
 	
-	var watermark = $.fn.watermark = function(options){ 
+	
+	$.fn.watermark = function(options){ 
 		
-		watermark.SetOptions(this,options);
-		return this.each(watermark.Load);
+		options = jQuery.extend({}, $.fn.watermark.settings, options);	
+		
+		return this.each(function(index, selector){
+				
+			var $watermark = $(selector),
+				
+				obj = {
+					value: $watermark.data('watermark'),
+					selfWatermarkPassword: null,
+					isFocused: false,	
+					
+					focus: function( event ){ 
+				
+						var dom = event.currentTarget;
+						this.isFocused = true;
+						this.inactiveWatermark(dom); 
+						if( this.isWatermarked(dom) ) { dom.value = ''; }
+						
+					},
+					
+					blur: function( event ){  
+						
+						var dom = event.currentTarget;
+						this.isFocused = false;
+						if( this.isWatermarked( dom ) ){ 
+							
+							 this.activeWatermark( dom ); 
+							 dom.value = this.value;  
+							
+						}   
+					
+					},		
+					
+					keyup: function( event ){ 
+						var dom = event.currentTarget;
+						$(dom).data('isWatermarked' ,obj.needWatermark() );
+						
+					},
+					
+					checkWatermarkActive: function( event){
+						var dom = event.currentTarget;
+						if( obj.needWatermark() ){ this.activeWatermark( dom ); }
+						else{ this.inactiveWatermark( dom ); }			
+						
+					},
+					
+					activeWatermark: function(self){
+					
+						$(self).addClass( options.activeWatermarkClassName );
+						if(this.selfWatermarkPassword !== null){
+							
+							$watermark.hide();
+							this.selfWatermarkPassword.show();
+							
+						}		
+					},
+					
+					inactiveWatermark: function(self){
+					
+						$(self).removeClass(options.activeWatermarkClassName);
+						if(this.selfWatermarkPassword !== null && !this.isFocused){
+							
+							this.selfWatermarkPassword.hide();
+							$watermark.show().trigger('focus');
+							
+							
+						}
+						
+					},
+					
+					needWatermark: function(){
+					
+						return ( $watermark.val() == '' ||  $watermark.val() == this.value);
+						
+					},
+					
+					handleFormSubmission: function( event ){
+						
+						$(event.currentTarget).find('.'+options.className).each(function(){ 
+							
+							if( obj.isWatermarked(this) ) {   this.value = '';  }
+							
+						});
+						
+					},
+					
+					isWatermarked: function( self ){ return $(self).data('isWatermarked'); },
+
+					actions: function(){
+						
+						$watermark.addClass(options.className)
+								  .data('isWatermarked' , true)
+								  .addClass( options.activeWatermarkClassName )
+								  .val( this.value );
+							
+						if($watermark.attr('type') == 'password'){
+							
+							this.selfWatermarkPassword = $watermark.clone();
+							this.selfWatermarkPassword.attr('type', 'text')
+													 .insertBefore($watermark)
+													 .bind('focus',this.InactiveWatermark);
+							$watermark.hide();
+						}
+
+						
+					}
+			};// obj ends
+			
+			$watermark
+				.bind('focus', $.proxy(obj,"focus"))
+				.bind('blur', $.proxy(obj,"blur"))
+				.bind('keyup', $.proxy(obj,"keyup"))
+				.bind('keypress', $.proxy(obj,"checkWatermarkActive"))
+				.parents('form').bind('submit', $.proxy(obj,"handleFormSubmission"));
+			
+			obj.actions();
+			
+		});
 			
 	};/* </ watermark > */
+	
+	$.fn.watermark.settings ={
+			
+			className : 'toolkit-watermark' ,
+			activeWatermarkClassName : 	'toolkit-watermark-active'
+	};	
 	
 	$.watermark = {};
 	$.watermark.destroy = function(){
 		
-		console.log(watermark.self);
 		if(watermark.self !== null){
 			watermark.self.each(function(){
 				
 				destroySelf = $(this);
-				destroySelf.removeData('isWatermarked').removeClass(watermark.options.className+' '+watermark.options.activeWatermarkClassName).unbind();
+				destroySelf.removeData('isWatermarked').removeClass( options.className+' '+watermark.options.activeWatermarkClassName).unbind();
 				
 			});
 		}
@@ -34,158 +156,9 @@
 		
 	};	
 	
-	watermark.self =  null;
-	watermark.options = {};
-	watermark.settings = {
-			
-			className : 'toolkit-watermark' ,
-			activeWatermarkClassName : 	'toolkit-watermark-active'
-	};	
-	
-	
-	
-	
-	watermark.SetOptions = function(self ,options){
-	
-		watermark.self = self;
-		watermark.options = jQuery.extend({},watermark.settings, options);	
-	
-	}; /* </ SetOptions > */
-	
-	
-	
-	watermark.Load = function(index, selector){
-		
-		var obj = {};
-		obj.self  =  $(selector);
-		obj.value = selector.value;
-		obj.selfWatermarkPassword = null;
-		obj.IsFocused = false;
-		
-		
-		obj.Focus = function(){ 
-			
-			obj.IsFocused = true;
-			obj.InactiveWatermark(this); 
-			if(obj.IsWatermarked(this)) { this.value = ''; }   
-			
-			
-		}; /* </ Focus>  */
-		
-		
-		
-		obj.Blur  = function(){  
-			
-			obj.IsFocused = false;
-			if(obj.IsWatermarked(this)){ 
-				
-				 obj.ActiveWatermark(this); 
-				 this.value = obj.value;  
-				
-			}   
-		
-		}; /* </ Blur>  */
-		
-		
-		
-		obj.Keyup = function(){ 
-			
-			$(this).data('isWatermarked' ,obj.NeedWatermark(this) );
-			
-		}; /* </ Keyup>  */
-		
-		
-		
-		obj.CheckWatermarkActive = function(self){
-			
-			if(obj.NeedWatermark(self)){ obj.ActiveWatermark(self); }
-			else{ obj.InactiveWatermark(self); }			
-			
-		}; /* </ CheckActiveClass >  */
-		
-		
-		
-		obj.ActiveWatermark = function(self){
-		
-			$(self).addClass(watermark.options.activeWatermarkClassName);
-			if(obj.selfWatermarkPassword !== null){
-				
-				obj.self.hide();
-				obj.selfWatermarkPassword.show();
-				
-			}		
-		};/* </ ActiveWatermark >  */
-		
-		
-		
-		obj.InactiveWatermark = function(self){
-		
-			$(self).removeClass(watermark.options.activeWatermarkClassName);
-			if(obj.selfWatermarkPassword !== null && !obj.IsFocused){
-				
-				console.log('in active water mark');
-				obj.selfWatermarkPassword.hide();
-				obj.self.show().trigger('focus');
-				
-				
-			}
-			
-		};/* </ InactiveWatermark >  */
-		
-		
-		
-		obj.NeedWatermark = function(self){
-			
-			return ( self.value == '' ||  self.value == obj.value);
-			
-		};/* </ NeedWatermark >  */
-		
-		
-		
-		obj.HandleFormSubmission = function(){
-			
-			$(this).find('.'+watermark.options.className).each(function(){ 
-				
-				if( obj.IsWatermarked(this) ) {   this.value = '';  }
-				
-			});
-			
-		}; /* </ HandleFormSubmission>  */
-		
-		
-		
-		obj.IsWatermarked = function(self){ return $(self).data('isWatermarked'); }
-		
-		
-		obj.self.bind('focus',obj.Focus);
-		obj.self.bind('blur',obj.Blur);
-		obj.self.bind('keyup',obj.Keyup);
-		obj.self.bind('keypress',obj.CheckWatermarkActive);
-		obj.self.parents('form').bind('submit',obj.HandleFormSubmission);
-
-		obj.Actions = function(){
-			
-			obj.self.addClass(watermark.options.className);
-			obj.self.data('isWatermarked' , true).addClass(watermark.options.activeWatermarkClassName);
-			if(obj.self.attr('type') == 'password'){
-				
-				obj.selfWatermarkPassword = obj.self.clone();
-				obj.selfWatermarkPassword.attr('type', 'text')
-										 .insertBefore(obj.self)
-										 .bind('focus',obj.InactiveWatermark);
-				obj.self.hide();
-			}
-
-			
-		}(); /* </ Actions>  */		
-		
-		console.log(index ,selector , obj.value	);
-		
-	}; /* </ Load > */
-	
 })(jQuery);
 
-
+/*
 
 $(document).ready(function(){
 
@@ -201,3 +174,5 @@ $(document).ready(function(){
 	//$.watermark.destroy();
 
 });
+
+*/
