@@ -10,8 +10,8 @@
 	
 	$(document).ready(function(){
 
-			
 	$('.test').autoTab(5);
+	//$('.test').autoTab({'fname':5, 'lname':10, 'default':3});
 	
 	
 	});
@@ -20,7 +20,7 @@
   
 </head>
 <body>
-  <h1 id="qunit-header">jQuery Toolkit isString.js</h1>
+  <h1 id="qunit-header">jQuery Toolkit autoTab.js</h1>
  <h2 id="qunit-banner"></h2>
  <h2 id="qunit-userAgent"></h2>
  <ol id="qunit-tests"></ol>
@@ -30,9 +30,10 @@
  </div>
  
  <div>
-	<input tabindex='1' class='test' size=12  type="text" />
-	<input tabindex='2' type="checkbox" class='test' value="yes" />
-	<input tabindex='3' class='test' size=12  type="text" />
+	<input class='test' size=12  type="text" name='fname'  />
+	<input class='test' size=12  type="checkbox" />
+	<input class='test' size=12  type="text" name='lname' />
+	<input class='test' size=12  type="text" />
  </div>
 
 </body>
