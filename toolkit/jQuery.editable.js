@@ -17,9 +17,10 @@
 		var editable = function(){
 			
 			var dom  = this,
-				$dom = $(this);
+				$dom = $(this),
+				actions;
 			
-			var actions = {
+			actions = {
 					
 				newValue: null,	
 				
@@ -36,7 +37,7 @@
 				
 				/***
 				 * activate
-				 * dom is going to be altered and new textbox is gonna popup
+				 * dom is going to be altered and new textbox is going to popup
 				 * @param {Object} event
 				 */
 				activate: function( event ){
@@ -45,23 +46,26 @@
 					if( $dom.data('content') ){ return; }
 					if( this.isEmpty() ){ $dom.data('empty', true);  }
 					this.buildEditable();
-					this.disableTooltip();
+					this.disableTooltip(); // disable the tooltip with the textbox is shown so we don't get the title on the textbox or textarea
 				},
 
 				
 				/**
-				 * * buildEditable
+				 * buildEditable 
+				 * 
 				 */
 				buildEditable: function(){
 					var cnt = ( $dom.data('empty') ) ? '' : $dom.html(),
-						input = (options.type == 'textarea') ? $("<textarea />") : $("<input type='text' />");
+						$input = (options.type == 'textarea') ? $("<textarea />") : $("<input type='text' />");
 						
-					input
+						$input
 						.val( $dom.data( {'content': cnt, 'empty': false }).data('content') )
-						.bind( 'keypress blur', $.proxy( this,'processRequest' ) )
+						.bind('blur', $.proxy(this,'processRequest'))
+						.bind('keypress', $.proxy(this,'processRequest') )
 						.appendTo( $dom.empty() )
 						.focus();
-					if( options.addClass ){ input.addClass( options.addClass ); }					
+						
+					if( options.addClass ){ $input.addClass( options.addClass ); }				
 				},
 				
 				/**
@@ -69,11 +73,11 @@
 				 * @param {Object} event
 				 */				
 				processRequest: function( event ){
+					
 					event.stopImmediatePropagation();	
-					if( event.which == 13 || event.type == 'blur' ){
-						if( options.saving ){ $dom.html( options.saving ); }
+					if( (options.type != 'textarea' && event.which == 13) || event.type === 'blur' ){
 						this.newValue = event.currentTarget.value;
-						
+						if( options.saving ){ $dom.html( options.saving ); }
 						//no change has been made to the input box so we don't need to trigger any ajax call
 						if( $dom.data('content') == this.newValue ){ this.updateDom(); return; }	
 						if( options.url ){ this.ajaxRequest(); }
@@ -172,7 +176,6 @@
 		success:   $.noop,//function( json, status, xhr ){  },
 		addClass:  false,
 		type:      'text' // text - textarea
-		
 	};
 
 })( jQuery );
