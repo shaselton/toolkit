@@ -6,15 +6,23 @@
 			.cla{
 				border: 3px solid red;
 			}
+			.tt{
+				border: 3px solid orange;
+			}
 		</style>
 		<script>
 			$(document).ready(function(){
 
-				$("div").editable({
+				var editable = $("div").editable({
 					addClass: 'cla',
 					type: 'textarea'
 				});
 				
+				editable.option('addClass','tt');
+				//editable.enable();
+				//editable.disable();
+				//editable.destroy();
+				//console.log( editable.option('addClass') );
 			});
 		
 		</script>

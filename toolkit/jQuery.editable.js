@@ -6,14 +6,79 @@
 
 /**
  * @author  Mahdi Pedramrazi
- * @version 0.1
- * @date    Nov,15 2010
+ * @author  Scott Haselton
+ * @version 1.0
  */
 
 (function( $ ){
 	
 	$.fn.editable = function( options ){
+		
 		options = $.extend( {}, $.fn.editable.defaults, options );
+		
+		var sharedMethods, editable;
+		
+		sharedMethods = {
+				enable: function( $dom ){
+					if( options.tooltip ){ $dom.attr( 'title', options.tooltip ); }			
+					if( options.cursor ){  $dom.css( 'cursor', options.cursor ); }						
+				},
+				disable: function( $dom ){
+					if( options.tooltip ){ $dom.attr( 'title', '' ); }	
+					if( options.cursor ){  $dom.css( 'cursor', '' ); }					
+				}
+		};
+		
+		/**
+		 * option  
+		 * @public
+		 */
+		this.option = function( opt ){
+			if( options.destroy ){ return }
+			if( !opt ){ return; }
+			if( arguments.length == 2){
+				if( options[opt] ) options[opt] =  arguments[1];
+				return this;
+			}
+			return options[opt];
+		};
+		
+		/**
+		 * disable  
+		 * @public
+		 */
+		this.disable = function(){
+			if( options.destroy || options.disabled ){ return }
+			options.disabled = true;
+			return this.each(function(){
+				sharedMethods.disable( $(this) );
+			});
+		};
+		
+		/**
+		 * destroy  
+		 * @public
+		 */
+		this.destroy = function(){
+			options.destroy = true;
+			return this.each(function(){
+				sharedMethods.disable( $(this) );
+			});
+		};
+		
+		/**
+		 * enable  
+		 * @public
+		 */
+		this.enable = function(){
+			if( options.destroy || !options.disabled ){ return }
+			options.disabled = false;
+			return this.each(function(){
+				sharedMethods.enable( $(this) );	
+			});
+		};
+		
+		
 		var editable = function(){
 			
 			var dom  = this,
@@ -29,7 +94,7 @@
 				*init
 				*/
 				init: function(){
-					this.enableTooltip();
+					sharedMethods.enable( $dom );
 					if( options.cursor ){  $dom.css( 'cursor', options.cursor ); }
 					$dom.bind( options.event, $.proxy( this,'activate' ) ).data('content', false);
 				},
@@ -41,12 +106,13 @@
 				 * @param {Object} event
 				 */
 				activate: function( event ){
+					if( options.disabled || options.destroy){ sharedMethods.disable( $dom ); return; }
 					event.preventDefault();
 					event.stopPropagation();	
 					if( $dom.data('content') ){ return; }
 					if( this.isEmpty() ){ $dom.data('empty', true);  }
 					this.buildEditable();
-					this.disableTooltip(); // disable the tooltip with the textbox is shown so we don't get the title on the textbox or textarea
+					sharedMethods.disable( $dom ); // disable the tooltip with the textbox is shown so we don't get the title on the textbox or textarea
 				},
 
 				
@@ -102,21 +168,6 @@
 					});
 				},
 				
-				/**
-				 * enableTooltip
-				 */	
-				enableTooltip: function(){
-					if( options.tooltip ){ $dom.attr( 'title', options.tooltip ); }					
-				},
-				
-				
-				/**
-				 * disableTooltip
-				 */	
-				disableTooltip: function(){
-					if( options.tooltip ){ $dom.attr( 'title', '' ); }	
-				},
-				
 				
 				/**
 				 * ajaxSuccess
@@ -141,7 +192,7 @@
 						$dom.data( 'empty', true );   
 					}
 					$dom.html( this.newValue ).data( 'content', false );
-					this.enableTooltip();
+					sharedMethods.enable( $dom );
 				},
 				
 				
@@ -160,6 +211,7 @@
 			actions.init();
 			
 		};  
+		
 		return this.each( editable );
 	}
 	
@@ -175,7 +227,9 @@
 		error: 	   $.noop,//function( json, status, xhr ){  },
 		success:   $.noop,//function( json, status, xhr ){  },
 		addClass:  false,
-		type:      'text' // text - textarea
+		type:      'text', // text - textarea
+		disabled: false,
+		destroy: false
 	};
 
 })( jQuery );
