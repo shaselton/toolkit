@@ -25,12 +25,6 @@ Fixing Plugins
 Production
 ----------
 
-* Nothing yet.
+* In Process
 
 
-Website
--------
-
-* I guess that your dudes back in iran were taking care of this?  correct? 
-
-# ** This is a work in progress document **
