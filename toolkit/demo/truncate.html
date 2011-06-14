@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<script type = "text/javascript" language = "javascript" src ="jquery-1.5.1.js" ></script> 
+		<script type = "text/javascript" language = "javascript" src ="../jQuery.truncate.js" ></script> 
+
+		<script>
+			$(document).ready(function(){
+
+				$('div').truncate({
+					size: 4,
+					ignoreWhiteSpace: true,
+					callback: function( result ){
+						console.log( $(this ) );
+						console.log( result );
+					}
+				});
+			});
+		
+		</script>
+	</head>
+	<body>
+		<div>There are some information here what should we do now...</div>
+		<div>There are some information here what should we asdasd asd do now...</div>
+	</body>
+
+
+</html>

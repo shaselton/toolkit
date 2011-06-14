@@ -7,25 +7,18 @@
  * @author Scott Haselton <shaselton@gmail.com>
  * @copyright © 2010 http://jQueryToolkit.com | All rights reserved. 
  * 
-
-
-
-	::Sample
-	
-	
-	var truncateCongig = {
-		width : 30 ,
-		delimeter : "..." ,
-		returnData :true 		
-	};
-	var callback = function(){  $(this).css("color","red"); }
-	var fullData = $("a").truncate(truncateCongig,callback);
-
-
-
-	:: Notice : if the returnData is set to TRUE then you should continue your chaining
-				in the call back function .
-
+ * 
+ * 
+ * 				$('div').truncate({
+					size: 4,
+					ignoreWhiteSpace: true,
+					callback: function( result ){
+						console.log( $(this ) );
+						console.log( result );
+					}
+				});
+ * 
+ * 
 */
 
 
@@ -33,84 +26,74 @@
 
     
     
-	var truncate = $.fn.truncate = function(options,callback){  
+	$.fn.truncate = function(){  
+		
+			var options = $.extend({}, $.fn.truncate.settings, arguments[0] || {});
 			
-			truncate.SetOptions(this,options);
-			if(typeof callback == 'function'){ callback.call(this);}
-			if(options.returnData){
-				this.each(truncate.Load);
-				return truncate.returnData; 
-			}else{
-				return this.each(truncate.Load);
-			}
+			function truncate(){
+				
+				//private
+				var $self = $(this),
+					self = this,
+					truncatedText = null,
+					originalText = $self.text().toString(),
+					returnData = null,
+					index = null,
+					whitespace = " ";
+				
+				//public methods
+				return {
+					init: function(){
+						if( options.truncateBy == 'chars'){
+							
+							var sliceSize = ( options.ignoreWhiteSpace ) 
+												? options.size + $.trim(originalText).split(/\s+/).length - 1 
+												: options.size;
+							
+							if( !options.ignoreDelimeterSize ){
+								sliceSize -= options.delimeter.length;
+							}					
+							
+							truncatedText = (originalText.length > options.size) 
+													? originalText.substring(0, sliceSize) + options.delimeter 
+													: originalText;
+						
+						}else if(options.truncateBy == 'word'){
+							truncatedText = $.trim(originalText).split(/\s+/).slice(0,options.size).join(whitespace) + options.delimeter;
+						}
+						
+						$self.text(truncatedText);
+							
+						options.callback.call(self, {
+			        		originalText : originalText ,
+			        		truncatedText : truncatedText,
+			        		index: index
+						});
+						
+					},
+					setIndex: function( i ){
+						index = i;
+					}
+				}
+				
+			};
+			
+			this.each(function(index){
+				var truncateInstance = truncate.call(this);
+				truncateInstance.setIndex( index );
+				truncateInstance.init( index );
+			});
+			
 	};
 	
-	
-	truncate.returnData = {};
-	truncate.options = {};
-	truncate.self =  null;
-	truncate.selectorLength = 1;
-	truncate.settings = {
-			width : 20 ,
+	$.fn.truncate.settings = {
+			truncateBy: 'chars', // chars, word
+			size : 10 ,
+			ignoreWhiteSpace: false,
+			ignoreDelimeterSize: true, // this is only when you have the truncateBy == "chars"
 			delimeter : "..." ,
-			returnData : false
+			callback: $.noop
 	};
-	
 
-	
-	truncate.SetOptions = function(self,options){
-		
-		truncate.selectorLength = $(self).length;
-		truncate.options = jQuery.extend({},truncate.settings, options);
-
-	};		
-	
-	
-	
-	truncate.Load = function(index, selector){
-		
-		truncate.index = index;
-		truncate.self = $(selector);
-		truncate.Init();
-		
-	};
-	
-	
-	
-	
-	truncate.Init = function(){
-	
-		var text 		= truncate.self.text().toString();
-        var textlength  = truncate.self.text().toString().length; 
-        if(textlength > truncate.options.width){
-           truncatedText = text.substring(0,truncate.options.width) + truncate.options.delimeter;  
-        }else{
-            truncatedText = text; 
-        } 
-        truncate.self.text(truncatedText);
-        truncate.BuildReturnData(text,truncatedText);
-
-
-	};	
-	
-	
-	
-	
-	truncate.BuildReturnData = function(text,truncatedText){
-		
-        if(truncate.selectorLength == 1){
-        	truncate.returnData = {
-            	text : text ,
-            	truncatedText : truncatedText	        		
-        	};
-        }else{
-        	truncate.returnData[truncate.index] = {
-                	text : text ,
-                	truncatedText : truncatedText	        		
-            	};        	
-        }
-        
-	}
-	
        
 })(jQuery);
