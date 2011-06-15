@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<script type = "text/javascript" language = "javascript" src ="jquery-1.5.1.js" ></script> 
+		<script type = "text/javascript" language = "javascript" src ="../jQuery.carousel.js" ></script> 
+
+		<script>
+		
+		$(document).ready(function(){
+
+			$('div').carousel({
+				prev: '.left',
+				next: '.right',
+				nav : '.nav',
+				loop: true,
+				limit: 3
+			});		
+
+		});
+		
+		</script>
+		<style>
+		
+		   nav {width:480px; 
+				border: 1px solid red; } 
+				
+			ul{
+				height: 150px;
+				padding:0;
+				margin:0;
+			}
+			
+			ul li{ 
+				width: 120px; 
+				background:#ccc; 
+				margin: 5px 10px; padding: 10px; 
+				height: 120px; }
+			
+		</style>
+	</head>
+	<body>
+		<div>
+			<a href='javascript:void(0)' class='left'>left</a>
+			<nav class='nav'>
+				<ul>
+					<li>a</li>
+					<li>b</li>
+					<li>c</li>
+					<li>d</li>
+					<li>e</li>
+					<li>f</li>
+					<li>g</li>
+					<li>h</li>
+					<li>i</li>
+				</ul>
+			</nav>
+			<a href='javascript:void(0)' class='right'>right</a>
+		</div>
+	</body>
+
+
+</html>
