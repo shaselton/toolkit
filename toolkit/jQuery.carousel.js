@@ -7,9 +7,15 @@
 					var activeIndex = 1,
 					container = this,
 					$ul = $(container).find('ul:first'),
-					elementWidth = $ul.find(':first-child').outerWidth(true),
 					size = $ul.children().length; 
-
+					
+					$ul.find('li').css({
+						display: 'block',
+						'float': 'left'
+					});
+					
+					var elementWidth = $ul.find(':first-child').outerWidth(true);
+					
 					$ul.css({
 						width :elementWidth * size, 
 						position: 'relative',
@@ -22,10 +28,7 @@
 					    overflow: 'hidden'
 					});
 
-					$ul.find('li').css({
-						display: 'block',
-						'float': 'left'
-					});
+
 
 					
 					var slider = {
@@ -37,21 +40,26 @@
 							}
 							$( options.next ).click($.proxy(this,"next"));
 							$( options.prev ).click( $.proxy(this,"prev"));
-							
+							$(container).bind('swipeleft', $.proxy(this,"next"));
+							$(container).bind('swiperight', $.proxy(this,"prev"));
 						},
+						
 						next: function(e){
 
 							e.preventDefault();
 							e.stopPropagation();
 							if( $ul.is(':animated') ){ return; }
 							if( activeIndex >= size - options.limit ){
-								if( !options.loop ) return;
+								if( !options.loop) return;
+					
 								activeIndex = 1;
 								$ul.animate({ left: 0 }, options.time);
 								return; 
 							}
 							activeIndex += options.limit;	
-							$ul.animate({ left: parseInt($ul.css('left')) + parseInt( options.limit * elementWidth * -1 ) }, options.time);
+							
+							$ul.animate({ left: parseInt($ul.css('left')) + parseInt( options.limit * elementWidth * -1 ) }, options.time );							
+						
 
 						},
 						prev: function(e){
@@ -61,6 +69,7 @@
 							if( $ul.is(':animated') ){ return; }
 							if( activeIndex === 1 ){ 
 								if( !options.loop ) return;
+						
 								activeIndex = options.limit * size;
 								$ul.animate({ left: (size - options.limit) * -elementWidth  }, options.time);
 								return; 
