@@ -95,7 +95,6 @@
 				*/
 				init: function(){
 					sharedMethods.enable( $dom );
-					if( options.cursor ){  $dom.css( 'cursor', options.cursor ); }
 					$dom.bind( options.event, $.proxy( this,'activate' ) ).data('content', false);
 				},
 				
